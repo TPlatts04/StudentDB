@@ -16,18 +16,17 @@ def main():
     options = input("Would you like to add a student, read from the file or delete a student? (A/R/D): ").upper()
     match options:
         case "R":
-            if options == "R":
-                f = open(FILENAME, "r")
-                line = f.readlines()
-                if len(line) > 1:
-                    i = 1
-                    while i < len(line):
-                        print(line[i].replace(",", " ").strip())
-                        i += 1
-                    sys.exit()
-                else:
-                    print("Can't read from file as there is no students...")
-                    main()
+            f = open(FILENAME, "r")
+            line = f.readlines()
+            if len(line) > 1:
+                i = 1
+                while i < len(line):
+                    print(line[i].replace(",", " ").strip())
+                    i += 1
+                main()
+            else:
+                print("Can't read from file as there is no students...")
+                main()
         case "A":
             studentName = input("What is the students name? ").capitalize()
             studentAge = int(input("What is the students age? "))
@@ -35,7 +34,12 @@ def main():
             studentInstance = Student(studentName, studentAge, studentBestSubject)
             return studentInstance, csvFieldnameAssignment(studentInstance)
         case "D":
-            deleteStudent()
+            f = open(FILENAME, "r")
+            lines = f.readlines()
+            if len(lines) == 1:
+                print("Cannot delete as there is no students...")
+            else:
+                deleteStudent()
         case "_":
             raise ValueError("Invalid option, please enter A/R...")
 
