@@ -14,8 +14,6 @@ class Student():
 
 def main():
     options = input("Would you like to add a student or read from the file? (A/R): ").upper()
-    if options != "A" or options != "R":
-        raise ValueError("Invalid option, please enter A or R")
     if options == "R":
         f = open(FILENAME, "r")
         line = f.readlines()
@@ -28,11 +26,14 @@ def main():
         else:
             print("Can't read from file as there is no students...")
             main()
-    studentName = input("What is the students name? ").capitalize()
-    studentAge = int(input("What is the students age? "))
-    studentBestSubject = input("What is the students best performing subject? ").capitalize()
-    studentInstance = Student(studentName, studentAge, studentBestSubject)
-    return studentInstance, csvFieldnameAssignment(studentInstance)
+    elif options == "A":
+        studentName = input("What is the students name? ").capitalize()
+        studentAge = int(input("What is the students age? "))
+        studentBestSubject = input("What is the students best performing subject? ").capitalize()
+        studentInstance = Student(studentName, studentAge, studentBestSubject)
+        return studentInstance, csvFieldnameAssignment(studentInstance)
+    else:
+        raise ValueError("Invalid option, please enter A/R...")
 
 
 # Allow the amount of fieldnames to be flexible, providing the programmer adds more variabless to class etc.
