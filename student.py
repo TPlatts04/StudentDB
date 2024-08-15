@@ -13,27 +13,31 @@ class Student():
         
 
 def main():
-    options = input("Would you like to add a student or read from the file? (A/R): ").upper()
-    if options == "R":
-        f = open(FILENAME, "r")
-        line = f.readlines()
-        if len(line) > 1:
-            i = 1
-            while i < len(line):
-                print(line[i].replace(",", " ").strip())
-                i += 1
-            sys.exit()
-        else:
-            print("Can't read from file as there is no students...")
-            main()
-    elif options == "A":
-        studentName = input("What is the students name? ").capitalize()
-        studentAge = int(input("What is the students age? "))
-        studentBestSubject = input("What is the students best performing subject? ").capitalize()
-        studentInstance = Student(studentName, studentAge, studentBestSubject)
-        return studentInstance, csvFieldnameAssignment(studentInstance)
-    else:
-        raise ValueError("Invalid option, please enter A/R...")
+    options = input("Would you like to add a student, read from the file or delete a student? (A/R/D): ").upper()
+    match options:
+        case "R":
+            if options == "R":
+                f = open(FILENAME, "r")
+                line = f.readlines()
+                if len(line) > 1:
+                    i = 1
+                    while i < len(line):
+                        print(line[i].replace(",", " ").strip())
+                        i += 1
+                    sys.exit()
+                else:
+                    print("Can't read from file as there is no students...")
+                    main()
+        case "A":
+            studentName = input("What is the students name? ").capitalize()
+            studentAge = int(input("What is the students age? "))
+            studentBestSubject = input("What is the students best performing subject? ").capitalize()
+            studentInstance = Student(studentName, studentAge, studentBestSubject)
+            return studentInstance, csvFieldnameAssignment(studentInstance)
+        case "D":
+            deleteStudent()
+        case "_":
+            raise ValueError("Invalid option, please enter A/R...")
 
 
 # Allow the amount of fieldnames to be flexible, providing the programmer adds more variabless to class etc.
@@ -48,6 +52,27 @@ def csvWriteStudent(writeStudent):
     with open(FILENAME, "a", newline="\n") as file:
         writer = csv.DictWriter(file, fieldnames=CSV_FIELDNAMES)
         writer.writerow({CSV_FIELDNAMES[0]: writeStudent.name, CSV_FIELDNAMES[1]: writeStudent.age, CSV_FIELDNAMES[2]: writeStudent.bestSubject})
+
+# Delete the specified student based off of line number
+def deleteStudent():
+    with open (FILENAME, "r") as file:
+        lines = file.readlines()
+        lineNum = 1
+        for x in lines:
+            print(f"({lineNum}): {x}")
+            lineNum += 1
+        studentDelete = int(input("Enter the line number you would like to delete (number in brackets): "))
+        if 1 <= studentDelete - 1 < len(lines):
+            del lines[studentDelete - 1]
+            with open(FILENAME, 'w') as file:
+                file.writelines(lines)
+            print("Student deleted...")
+        elif studentDelete == 1:
+            print("Cannot delete headings...\n")
+            deleteStudent()
+        else:
+            print("Line number is out of range.")
+            deleteStudent()
 
 if __name__ == "__main__":
     if os.path.isfile(FILENAME):
