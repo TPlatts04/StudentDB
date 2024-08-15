@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 
 FILENAME = "student.csv"
 CSV_FIELDNAMES = []
@@ -12,9 +13,20 @@ class Student():
         
 
 def main():
-    studentName = input("What is the students name? ")
+    options = input("Would you like to add a student or read from the file? (A/R): ").upper()
+    if options == "R":
+        f = open(FILENAME, "r")
+        line = f.readlines()
+        if line:
+            for i in range(len(line)):
+                print(line[i].strip().split(","))
+                sys.exit()
+        else:
+            print("Can't read from file as there is no students...")
+            main()
+    studentName = input("What is the students name? ").capitalize()
     studentAge = int(input("What is the students age? "))
-    studentBestSubject = input("What is the students best performing subject? ")
+    studentBestSubject = input("What is the students best performing subject? ").capitalize()
     studentInstance = Student(studentName, studentAge, studentBestSubject)
     return studentInstance, csvFieldnameAssignment(studentInstance)
 
@@ -26,14 +38,14 @@ def csvFieldnameAssignment(tempStudent):
     CSV_FIELDNAMES.extend((line.strip().split(",")))
     csvWriteStudent(tempStudent)
 
-
+# Write the students name, age and best subject to the csv
 def csvWriteStudent(writeStudent):
     with open(FILENAME, "a", newline="\n") as file:
         writer = csv.DictWriter(file, fieldnames=CSV_FIELDNAMES)
         writer.writerow({CSV_FIELDNAMES[0]: writeStudent.name, CSV_FIELDNAMES[1]: writeStudent.age, CSV_FIELDNAMES[2]: writeStudent.bestSubject})
     csvOutput()
 
-
+# Output the csv "DATABASE" to the terminal
 def csvOutput():
     with open(FILENAME, newline="") as file:
         reader = csv.DictReader(file)
