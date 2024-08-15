@@ -52,6 +52,7 @@ def csvWriteStudent(writeStudent):
     with open(FILENAME, "a", newline="\n") as file:
         writer = csv.DictWriter(file, fieldnames=CSV_FIELDNAMES)
         writer.writerow({CSV_FIELDNAMES[0]: writeStudent.name, CSV_FIELDNAMES[1]: writeStudent.age, CSV_FIELDNAMES[2]: writeStudent.bestSubject})
+    main()
 
 # Delete the specified student based off of line number
 def deleteStudent():
@@ -73,6 +74,7 @@ def deleteStudent():
         else:
             print("Line number is out of range.")
             deleteStudent()
+    main()
 
 if __name__ == "__main__":
     if os.path.isfile(FILENAME):
