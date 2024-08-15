@@ -17,10 +17,12 @@ def main():
     if options == "R":
         f = open(FILENAME, "r")
         line = f.readlines()
-        if line:
-            for i in range(len(line)):
-                print(line[i].strip().split(","))
-                sys.exit()
+        if len(line) > 1:
+            i = 1
+            while i < len(line):
+                print(line[i].replace(",", " ").strip())
+                i += 1
+            sys.exit()
         else:
             print("Can't read from file as there is no students...")
             main()
@@ -43,15 +45,6 @@ def csvWriteStudent(writeStudent):
     with open(FILENAME, "a", newline="\n") as file:
         writer = csv.DictWriter(file, fieldnames=CSV_FIELDNAMES)
         writer.writerow({CSV_FIELDNAMES[0]: writeStudent.name, CSV_FIELDNAMES[1]: writeStudent.age, CSV_FIELDNAMES[2]: writeStudent.bestSubject})
-    csvOutput()
-
-# Output the csv "DATABASE" to the terminal
-def csvOutput():
-    with open(FILENAME, newline="") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            print(row[CSV_FIELDNAMES[0]], row[CSV_FIELDNAMES[1]], row[CSV_FIELDNAMES[2]])
-    
 
 if __name__ == "__main__":
     if os.path.isfile(FILENAME):
