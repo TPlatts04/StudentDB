@@ -14,6 +14,8 @@ class Student():
 
 def main():
     options = input("Would you like to add a student or read from the file? (A/R): ").upper()
+    if options != "A" or options != "R":
+        raise ValueError("Invalid option, please enter A or R")
     if options == "R":
         f = open(FILENAME, "r")
         line = f.readlines()
